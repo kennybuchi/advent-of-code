@@ -1,5 +1,5 @@
 import sys
-inputFile = open('/home/klee/aoc/2017/day3input.txt', 'r')
+inputFile = open('./2017/day3input.txt', 'r')
 input = inputFile.read()
 
 #READ INPUT

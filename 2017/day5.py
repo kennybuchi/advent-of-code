@@ -1,4 +1,4 @@
-inputFile = open('/home/klee/aoc/2017/day5input.txt', 'r')
+inputFile = open('./2017/day5input.txt', 'r')
 input = inputFile.read()
 
 #DAY 1
