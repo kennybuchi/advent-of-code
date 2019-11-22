@@ -1,4 +1,3 @@
-import sys
 inputFile = open('./2017/day10input.txt', 'r')
 input = inputFile.read()
 
