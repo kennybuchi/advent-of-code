@@ -10,11 +10,8 @@ def resolveParameter(nums, index, parameter, relativeIndex):
     else:
         return -1
 
-def intCode(inputText, inputs = []):
-    inputArr = inputText.split(',')
-    nums = list(map(int, inputArr)) + [0]*10000
+def intCode(nums, inputs = [], i = 0):
     output = []
-    i = 0
     relativeIndex = 0
     while True:
         opcode = nums[i] % 100
