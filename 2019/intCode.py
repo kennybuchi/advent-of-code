@@ -10,9 +10,14 @@ def resolveParameter(nums, index, parameter, relativeIndex):
     else:
         return -1
 
-def intCode(nums, inputs = [], i = 0):
+def resolveParameter2(nums, index, parameter, relativeIndex):
+    if parameter == '2':
+        return nums[index] + relativeIndex
+    else:
+        return nums[index]
+
+def intCode(nums, inputs = [], i = 0, relativeIndex = 0):
     output = []
-    relativeIndex = 0
     while True:
         opcode = nums[i] % 100
         parameter = int(nums[i] / 100)
@@ -21,18 +26,18 @@ def intCode(nums, inputs = [], i = 0):
             instString = str(parameter).zfill(3)[::-1]
 
         if opcode == 1:
-            nums[resolveParameter(nums, i + 3, instString[2], relativeIndex)] = nums[resolveParameter(nums, i + 1, instString[0], relativeIndex)] + nums[resolveParameter(nums, i + 2, instString[1], relativeIndex)]
+            nums[resolveParameter2(nums, i + 3, instString[2], relativeIndex)] = nums[resolveParameter(nums, i + 1, instString[0], relativeIndex)] + nums[resolveParameter(nums, i + 2, instString[1], relativeIndex)]
             i += 4
         elif opcode == 2:
-            nums[resolveParameter(nums, i + 3, instString[2], relativeIndex)] = nums[resolveParameter(nums, i + 1, instString[0], relativeIndex)] * nums[resolveParameter(nums, i + 2, instString[1], relativeIndex)]
+            nums[resolveParameter2(nums, i + 3, instString[2], relativeIndex)] = nums[resolveParameter(nums, i + 1, instString[0], relativeIndex)] * nums[resolveParameter(nums, i + 2, instString[1], relativeIndex)]
             i += 4
         elif opcode == 3:
             newInput = 0
             if len(inputs) > 0:
                 newInput = inputs.pop(0)
             else:
-                newInput = int(input("Input: "))
-            nums[resolveParameter(nums, i + 1, instString[0], relativeIndex)] = newInput
+                break
+            nums[resolveParameter2(nums, i + 1, instString[0], relativeIndex)] = newInput
             i += 2
         elif opcode == 4:
             output.append(nums[resolveParameter(nums, i + 1, instString[0], relativeIndex)])
@@ -48,18 +53,20 @@ def intCode(nums, inputs = [], i = 0):
             else:
                 i += 3
         elif opcode == 7:
-            nums[resolveParameter(nums, i + 3, instString[2], relativeIndex)] = (1 if nums[resolveParameter(nums, i + 1, instString[0], relativeIndex)] < nums[resolveParameter(nums, i + 2, instString[1], relativeIndex)] else 0)
+            nums[resolveParameter2(nums, i + 3, instString[2], relativeIndex)] = (1 if nums[resolveParameter(nums, i + 1, instString[0], relativeIndex)] < nums[resolveParameter(nums, i + 2, instString[1], relativeIndex)] else 0)
             i += 4
         elif opcode == 8:
-            nums[resolveParameter(nums, i + 3, instString[2], relativeIndex)] = (1 if nums[resolveParameter(nums, i + 1, instString[0], relativeIndex)] == nums[resolveParameter(nums, i + 2, instString[1], relativeIndex)] else 0)
+            nums[resolveParameter2(nums, i + 3, instString[2], relativeIndex)] = (1 if nums[resolveParameter(nums, i + 1, instString[0], relativeIndex)] == nums[resolveParameter(nums, i + 2, instString[1], relativeIndex)] else 0)
             i += 4
         elif opcode == 9:
             relativeIndex += nums[resolveParameter(nums, i + 1, instString[0], relativeIndex)]
             i += 2
         elif opcode == 99:
+            if len(output) == 0:
+                output.append('HALT')
             break
         else:
             print('ERROR, ABORTING')
             sys.exit(1)
 
-    return output
+    return (output, i, relativeIndex)
